@@ -10,39 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
+const addNewProduct_1 = require("../controllers/addNewProduct");
 const getAllProducts_1 = require("../controllers/getAllProducts");
+const getProductById_1 = require("../controllers/getProductById");
 const prisma = new client_1.PrismaClient();
 const router = require('express').Router();
 router.get('/products', (0, getAllProducts_1.getAllProducts)());
-router.get('/products/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const product = yield prisma.product.findUnique({
-            where: {
-                id: Number(req.params.id),
-            },
-        });
-        res.json(product);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
-router.post('/products/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { name, price, categoryId } = req.body;
-        const product = yield prisma.product.create({
-            data: {
-                name,
-                price,
-                categoryId,
-            },
-        });
-        res.json(product);
-    }
-    catch (error) {
-        next(error);
-    }
-}));
+router.get('/products/:id', (0, getProductById_1.getProductById)());
+router.post('/products/', (0, addNewProduct_1.addNewProduct)());
 router.delete('/products/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

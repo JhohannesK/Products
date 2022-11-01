@@ -9,26 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllProducts = void 0;
+exports.getProductById = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
+const getProductById = () => {
     (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const products = yield prisma.product.findMany({
-                include: {
-                    category: {
-                        select: {
-                            name: true,
-                        },
-                    },
+            const product = yield prisma.product.findUnique({
+                where: {
+                    id: Number(req.params.id),
                 },
             });
-            res.json(products);
+            res.json(product);
         }
         catch (error) {
             next(error);
         }
     });
-});
-exports.getAllProducts = getAllProducts;
+};
+exports.getProductById = getProductById;

@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, NextFunction, Response } from 'express';
+import { addNewProduct } from '../controllers/addNewProduct';
 import { getAllProducts } from '../controllers/getAllProducts';
+import { getProductById } from '../controllers/getProductById';
 
 const prisma = new PrismaClient();
 
@@ -8,40 +10,9 @@ const router = require('express').Router();
 
 router.get('/products', getAllProducts());
 
-router.get(
-	'/products/:id',
-	async (req: Request, res: Response, next: NextFunction) => {
-		try {
-			const product = await prisma.product.findUnique({
-				where: {
-					id: Number(req.params.id),
-				},
-			});
-			res.json(product);
-		} catch (error) {
-			next(error);
-		}
-	}
-);
+router.get('/products/:id', getProductById());
 
-router.post(
-	'/products/',
-	async (req: Request, res: Response, next: NextFunction) => {
-		try {
-			const { name, price, categoryId } = req.body;
-			const product = await prisma.product.create({
-				data: {
-					name,
-					price,
-					categoryId,
-				},
-			});
-			res.json(product);
-		} catch (error) {
-			next(error);
-		}
-	}
-);
+router.post('/products/', addNewProduct());
 
 router.delete(
 	'/products/:id',
